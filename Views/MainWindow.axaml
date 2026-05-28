@@ -1,20 +1,112 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:AsciiArtApp.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:vm="using:AsciiArtApp.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="700"
         x:Class="AsciiArtApp.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="AsciiArtApp">
+        Title="ASCII Art Generator"
+        Width="900" Height="700"
+        MinWidth="700" MinHeight="500">
 
     <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    <DockPanel>
+        <!-- Header -->
+        <Border DockPanel.Dock="Top" Background="#1E1E2E" Padding="20,15">
+            <StackPanel>
+                <TextBlock Text="ASCII Art Generator"
+                           FontSize="24" FontWeight="Bold"
+                           Foreground="#CDD6F4"/>
+                <TextBlock Text="Transform text and images into ASCII art"
+                           FontSize="13" Foreground="#A6ADC8"
+                           Margin="0,3,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Tabs -->
+        <TabControl Margin="10">
+            <!-- Tab 1: Text to ASCII -->
+            <TabItem Header="Text → ASCII">
+                <Grid RowDefinitions="Auto,Auto,Auto,*,Auto" Margin="10">
+
+                    <!-- Input text -->
+                    <StackPanel Grid.Row="0" Spacing="5">
+                        <TextBlock Text="Type your text:" FontWeight="Bold"/>
+                        <TextBox Text="{Binding InputText}"
+                                 Watermark="Hello World"
+                                 Padding="10,8"
+                                 FontSize="14"/>
+                    </StackPanel>
+
+                    <!-- Font selector -->
+                    <StackPanel Grid.Row="1" Spacing="5" Margin="0,15,0,0">
+                        <TextBlock Text="Choose font style:" FontWeight="Bold"/>
+                        <ComboBox ItemsSource="{Binding AvailableFonts}"
+                                  SelectedItem="{Binding SelectedFont}"
+                                  Padding="10,8"
+                                  HorizontalAlignment="Stretch"/>
+                    </StackPanel>
+
+                    <!-- Generate button -->
+                    <Button Grid.Row="2"
+                            Content="Generate ASCII"
+                            Command="{Binding GenerateTextAsciiCommand}"
+                            Background="#89B4FA" Foreground="#1E1E2E"
+                            FontWeight="Bold"
+                            Padding="20,10"
+                            Margin="0,15,0,15"
+                            HorizontalAlignment="Left"/>
+
+                    <!-- Output area -->
+                    <Border Grid.Row="3"
+                            Background="#1E1E2E"
+                            BorderBrush="#45475A"
+                            BorderThickness="1"
+                            CornerRadius="4"
+                            Padding="10">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                                      VerticalScrollBarVisibility="Auto">
+                            <TextBlock Text="{Binding TextAsciiOutput}"
+                                       FontFamily="Consolas, Courier New, monospace"
+                                       FontSize="12"
+                                       Foreground="#CDD6F4"
+                                       TextWrapping="NoWrap"/>
+                        </ScrollViewer>
+                    </Border>
+
+                    <!-- Action buttons -->
+                    <StackPanel Grid.Row="4" Orientation="Horizontal" Spacing="10" Margin="0,15,0,0">
+                        <Button Content="📋 Copy to Clipboard"
+                                Command="{Binding CopyTextAsciiCommand}"
+                                Padding="15,8"/>
+                        <Button Content="💾 Save as .txt"
+                                Command="{Binding SaveTextAsciiCommand}"
+                                Padding="15,8"/>
+                        <TextBlock Text="{Binding StatusMessage}"
+                                   VerticalAlignment="Center"
+                                   Foreground="#A6E3A1"
+                                   Margin="10,0,0,0"/>
+                    </StackPanel>
+
+                </Grid>
+            </TabItem>
+
+            <!-- Tab 2: Image to ASCII (placeholder for now) -->
+            <TabItem Header="Image → ASCII">
+                <Border Padding="40">
+                    <TextBlock Text="Coming next..."
+                               FontSize="18"
+                               Foreground="#6C7086"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                </Border>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
 
 </Window>
